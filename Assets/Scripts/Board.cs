@@ -44,8 +44,11 @@ public class Board : MonoBehaviour
       for(int col=0; col<colCount; col++)
       {
         float positionX = (col - (int)(colCount/2)) * spaceX;
-        float positionY = (row - (int)(rowCount/2)) * spaceY;
+        float positionY = (row - (int)(rowCount/2)) * -spaceY;
         Vector3 pos = new Vector3(positionX, positionY, 0f);
+
+        Debug.Log("x = " + positionX);
+        Debug.Log("y = " + positionY);
 
         GameObject cellObj = Instantiate(cellPrefab, pos, quaternion.identity);
         Cell cell = cellObj.GetComponent<Cell>();
@@ -173,9 +176,16 @@ public class Board : MonoBehaviour
 
         if(cardArr[row, col-1] == null)
         {
+          Debug.Log("xxx");
           //왼쪽으로 이동가능
-          obj.GetComponent<Card>().MoveCard();
+          GameObject targetObj = cellArr[row, col-1];
+          float posX = targetObj.transform.position.x;
+          float posY = targetObj.transform.position.y;
+          Vector3 pos = new Vector3(posX, posY, 0f);
+          obj.GetComponent<Card>().MoveCard(pos);
+
           cardArr[row, col] = null;
+          continue;
         }
 
         if(col+1 == colCount)
@@ -199,7 +209,13 @@ public class Board : MonoBehaviour
     //이동후 위치 갱신 필요
     //fromObj.GetComponent<Card>().posX = toObj.GetComponent<Card>().posX;
     //fromObj.GetComponent<Card>().posY = toObj.GetComponent<Card>().posY;
-
-  
   }
+
+  public void DestroyCard(GameObject obj)
+  {
+    cardArr[obj.GetComponent<Card>().posX, obj.GetComponent<Card>().posY] = null;
+    Destroy(obj);
+    MoveCardChain();
+  }
+
 }

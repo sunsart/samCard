@@ -50,15 +50,10 @@ public class Card : MonoBehaviour
     });
   }
 
-  //public void MoveCard(GameObject target)
-  public void MoveCard()
+  public void MoveCard(Vector3 targetPos)
   {
-    // float spaceY = 2.5f;
-    // float spaceX = 2f;
-    // float positionX = (col - (int)(colCount/2)) * spaceX;
-    // float positionY = (row - (int)(rowCount/2)) * spaceY;
-    // Vector3 pos = new Vector3(positionX, positionY, 0f);
-    // transform.DOMove(target.transform.position, 0.5f);
+    Debug.Log("move card...");
+    transform.DOMove(targetPos, 0.5f);
   }
 
 

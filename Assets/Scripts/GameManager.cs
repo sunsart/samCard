@@ -61,10 +61,7 @@ public class GameManager : MonoBehaviour
       enemyObj.GetComponent<CardEnemy>().SetCardStat();
       if(enemyObj.GetComponent<CardEnemy>().healthVal <= 0)
       {
-        //삭제한 enemy 위치로 player를 이동함
-        //board.MoveCardChain(playerObj, enemyObj);
-        Destroy(enemyObj);
-        board.MoveCardChain();
+        board.DestroyCard(enemyObj);
       }
 
       //player 처리 
