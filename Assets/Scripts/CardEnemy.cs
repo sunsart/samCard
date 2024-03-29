@@ -29,8 +29,10 @@ public class CardEnemy : Card
       return;
 
     //플레이어와 이웃 여부 확인
-    if(GameManager.instance.board.IsNeighbor(posX, posY))
+    if(GameManager.instance.board.IsNeighbor(posNum))
+    {
       GameManager.instance.TakeBattle(gameObject);
+    }
   }
 
 }

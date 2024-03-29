@@ -17,6 +17,8 @@ public class Card : MonoBehaviour
   [HideInInspector] public int posX;
   [HideInInspector] public int posY;
 
+  [HideInInspector] public int posNum;
+
   protected bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   protected bool isFlipping = false;  // 앞면으로 뒤집어지는중인지 여부
 
@@ -50,9 +52,8 @@ public class Card : MonoBehaviour
     });
   }
 
-  public void MoveCard(Vector3 targetPos)
+  public void MoveCard(Vector2 targetPos)
   {
-    Debug.Log("move card...");
     transform.DOMove(targetPos, 0.5f);
   }
 

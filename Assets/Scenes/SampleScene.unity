@@ -630,6 +630,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDir: 0
+  cardPositions:
+  - {x: -2, y: 2.5}
+  - {x: 0, y: 2.5}
+  - {x: 2, y: 2.5}
+  - {x: -2, y: 0}
+  - {x: 0, y: 0}
+  - {x: 2, y: 0}
+  - {x: -2, y: -2.5}
+  - {x: 0, y: -2.5}
+  - {x: 2, y: -2.5}
   cellPrefab: {fileID: 683234862199827449, guid: b344be044f8efdd4693df438557f6a93, type: 3}
   cardPlayerPrefab: {fileID: 3471969550751204456, guid: 54b9bf405ec063f41a47e93203044a93, type: 3}
   cardEnemyPrefab: {fileID: 7877262044788101972, guid: dac640810e918ec44999a70a9a640a95, type: 3}
