@@ -17,7 +17,7 @@ public class CardPlayer : Card
     textHealth.alpha = 0f;
     textAttack.alpha = 0f;
 
-    Invoke("FlipCard", 1f);
+    Invoke("FlipCard", 0.5f);
   }
 
   public void SetCardStat()

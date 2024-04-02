@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -16,17 +18,11 @@ public class Board : MonoBehaviour
   }
   public Direction moveDir;
 
-  public Vector2[] cardPositions = new Vector2[9];
+  private GameObject[,] cardArr = new GameObject[3,3];
 
-  //카드 오브젝트를 저장할 이차원배열
-  [HideInInspector] GameObject [,] cellArr = new GameObject[3,3];
-  [HideInInspector] GameObject [,] cardArr = new GameObject[3,3];
-
-  [SerializeField] private GameObject cellPrefab;
   [SerializeField] private GameObject cardPlayerPrefab;
   [SerializeField] private GameObject cardEnemyPrefab;
 
-  [HideInInspector] public GameObject cardPlayerObj;
 
   void Start()
   {
@@ -35,48 +31,63 @@ public class Board : MonoBehaviour
 
   void InitBoard() 
   {
-    for(int i=0; i<cardPositions.Length; i++)
+    for(int i=0; i<3; i++)
     {
-      Vector2 pos = cardPositions[i];
-
-      if(i==4)
+      for(int j=0; j<3; j++)
       {
-        this.cardPlayerObj = Instantiate(cardPlayerPrefab, pos, quaternion.identity);
-        cardPlayerObj.GetComponent<CardPlayer>().posNum = i;
-        continue;
-      }
+        Vector2 cardPosition = GetCardPosition(i, j);
 
-      GameObject cardEnemyObj = Instantiate(cardEnemyPrefab, pos, quaternion.identity);
-      cardEnemyObj.GetComponent<CardEnemy>().posNum = i;
+        if(i==1 && j==1)
+        {
+          GameObject cardPlayerObj = Instantiate(cardPlayerPrefab, cardPosition, quaternion.identity);
+          cardPlayerObj.GetComponent<Card>().posX = i;
+          cardPlayerObj.GetComponent<Card>().posY = j;
+          this.cardArr[i, j] = cardPlayerObj;
+          continue;
+        }
+
+        GameObject cardEnemyObj = Instantiate(cardEnemyPrefab, cardPosition, quaternion.identity);
+        cardEnemyObj.GetComponent<Card>().posX = i;
+        cardEnemyObj.GetComponent<Card>().posY = j;
+        this.cardArr[i, j] = cardEnemyObj;
+      }
     }
   }
 
-  public bool IsNeighbor(int clickedCardNum) 
+  public bool IsNeighbor(GameObject targetObj) 
   {
     bool isNeighbor = false;
 
-    int playerNum = this.cardPlayerObj.GetComponent<Card>().posNum;
-    int enemyNum = clickedCardNum;
+    GameObject cardPlayerObj = GameObject.FindGameObjectWithTag("Player");
+    int playerPosX = cardPlayerObj.GetComponent<Card>().posX;
+    int playerPosY = cardPlayerObj.GetComponent<Card>().posY;
 
-    if ((playerNum - enemyNum)==1 && (playerNum % 3) != 0)
+    int targetPosX = targetObj.GetComponent<Card>().posX;
+    int targetPosY = targetObj.GetComponent<Card>().posY;
+
+    //0,0  1,0  2,0
+    //0,1  1,1  2,1
+    //0,2  1,2  2,2
+
+    if ((playerPosY==targetPosY) && (playerPosX-targetPosX==1))
     {
       moveDir = Direction.Left;
       isNeighbor = true;
       Debug.Log("왼쪽");
-    }
-    else if ((playerNum - enemyNum)==-1 && (playerNum % 3) != 2)
+    } 
+    else if ((playerPosY==targetPosY) && (playerPosX-targetPosX==-1))
     {
       moveDir = Direction.Right;
       isNeighbor = true;
       Debug.Log("오른쪽");
-    } 
-    else if ((playerNum - enemyNum)==3 && playerNum >= 3)
+    }
+    else if ((playerPosX==targetPosX) && (playerPosY-targetPosY==1))
     {
       moveDir = Direction.Up;
       isNeighbor = true;
       Debug.Log("위쪽");
-    } 
-    else if ((playerNum - enemyNum)==-3 && playerNum <= 5)
+    }
+    else if ((playerPosX==targetPosX) && (playerPosY-targetPosY==-1))
     {
       moveDir = Direction.Down;
       isNeighbor = true;
@@ -89,87 +100,56 @@ public class Board : MonoBehaviour
     return isNeighbor;
   }
  
-  // public void MoveCardChain()
-  // {
-  //   //이동방향은 moveDir
-  //   //왼쪽 : col 값에서 -1
-  //   //오른쪽
-  //   //아래쪽
-  //   //위쪽
-
-  //   int rowCount = 3;
-  //   int colCount = 3;
-  //   for(int row=0; row<rowCount; row++) 
-  //   {
-  //     for(int col=0; col<colCount; col++)
-  //     {
-  //       //배열에서 차례대로 하나씩 꺼내서
-  //       GameObject obj = cardArr[row, col];
-
-  //       //moveDir 방향으로 이동할 수 있는지 확인 (moveDir 방향에 오브젝트가 있는지 확인)
-  //       if(col-1 < 0)
-  //         continue;
-
-  //       if(cardArr[row, col-1] == null)
-  //       {
-  //         Debug.Log("xxx");
-  //         //왼쪽으로 이동가능
-  //         GameObject targetObj = cellArr[row, col-1];
-  //         float posX = targetObj.transform.position.x;
-  //         float posY = targetObj.transform.position.y;
-  //         Vector3 pos = new Vector3(posX, posY, 0f);
-  //         obj.GetComponent<Card>().MoveCard(pos);
-
-  //         cardArr[row, col] = null;
-  //         continue;
-  //       }
-
-  //       if(col+1 == colCount)
-  //       {
-  //         //카드 이동으로 마지막 배열자리에 카드 생성
-  //         float spaceY = 2.5f;
-  //         float spaceX = 2f;
-  //         float positionX = (col - (int)(colCount/2)) * spaceX;
-  //         float positionY = (row - (int)(rowCount/2)) * spaceY;
-  //         Vector3 pos = new Vector3(positionX, positionY, 0f);
-  //         GameObject cardObj = Instantiate(cardEnemyPrefab, pos, quaternion.identity);
-  //         Card card = cardObj.GetComponent<Card>();
-  //         card.posX = col;
-  //         card.posY = row;
-  //         cardArr[row, col] = cardObj;
-  //       }
-  //     }
-  //   }
-
-  //   //fromObj.GetComponent<Card>().MoveCard(toObj);
-  //   //이동후 위치 갱신 필요
-  //   //fromObj.GetComponent<Card>().posX = toObj.GetComponent<Card>().posX;
-  //   //fromObj.GetComponent<Card>().posY = toObj.GetComponent<Card>().posY;
-  // }
-
-  public void DestroyCard(GameObject obj)
+  public void ArrangeBoard(GameObject obj)
   {
-    //cardArr[obj.GetComponent<Card>().posX, obj.GetComponent<Card>().posY] = null;
-    MovePlayerCard(obj.GetComponent<Card>().posNum);
+    int targetNum = obj.GetComponent<Card>().posNum;
+
+    //enemy 제거
     Destroy(obj);
-    //MoveCardChain();
+
+    //왼쪽 이동이라고 하면.......
+    foreach(GameObject moveObj in this.cardList)
+    {
+      int i = moveObj.GetComponent<Card>().posNum;
+
+      if((i % 3 != 0) && (targetNum < i) && ((i/3)==(targetNum/3)))
+      {
+        moveObj.GetComponent<Card>().MoveCard(this.cardPositions[i-1]);
+        moveObj.GetComponent<Card>().posNum--;
+      }
+
+      //오른쪽 맨 끝이면 그 자리에 새로운 카드 생성
+      if((i % 3 == 2) && (targetNum < i) && ((i/3)==(targetNum/3)))
+      {
+        StartCoroutine(SpawnCard(i));
+      }
+    }
+  } 
+
+  IEnumerator SpawnCard(int posNum)
+  {
+    yield return new WaitForSeconds(0.5f);
+    GameObject cardEnemyObj = Instantiate(cardEnemyPrefab, cardPositions[posNum], quaternion.identity);
+    cardEnemyObj.GetComponent<Card>().posNum = posNum;
   }
 
-  public void MovePlayerCard(int num)
+  private Vector2 GetCardPosition(int x, int y)
   {
-    Vector2 toMovePos = this.cardPositions[num];
-    this.cardPlayerObj.GetComponent<Card>().MoveCard(toMovePos);
+    //x=0 -2
+    //x=1 0
+    //x=2 2
 
-    //플레이어의 moveDir 방향을 알고 있음
-    //플레이어 왼쪽 이동 > 플레이어 오른쪽 카드 존재 > 오른쪽 카드 왼쪽으로 한칸 이동
-    //플레이어 왼쪽 이동 > 플레이어 오른쪽 카드 부존재 > 새로운 카드 생성 
-    //같은 방식으로
-    NextCardMove();
-  }
+    //y=0 2.5
+    //y=1 0
+    //y=2 -2.5
 
-  public void NextCardMove()
-  {
+    float spaceX = 2f;
+    float spaceY = -2.5f;
 
+    float posX = (x-1) * spaceX;
+    float posY = (y-1) * spaceY;
+
+    return new Vector2(posX, posY);
   }
 
 }

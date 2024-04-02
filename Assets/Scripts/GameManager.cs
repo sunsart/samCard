@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
   public void TakeBattle(GameObject obj)
   {
-    GameObject playerObj = GameManager.instance.board.cardPlayerObj;
+    GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
     GameObject enemyObj = obj;
 
     //int >> 값의 복사가 이루어져서 서로 다른 메모리에 저장됨
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
       enemyObj.GetComponent<CardEnemy>().SetCardStat();
       if(enemyObj.GetComponent<CardEnemy>().healthVal <= 0)
       {
-        board.DestroyCard(enemyObj);
+        board.ArrangeBoard(enemyObj);
       }
 
       //player 처리 
