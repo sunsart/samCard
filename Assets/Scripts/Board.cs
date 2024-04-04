@@ -102,35 +102,56 @@ public class Board : MonoBehaviour
  
   public void ArrangeBoard(GameObject obj)
   {
-    int targetNum = obj.GetComponent<Card>().posNum;
-
-    //enemy 제거
     Destroy(obj);
 
-    //왼쪽 이동이라고 하면.......
-    foreach(GameObject moveObj in this.cardList)
+    int targePosX = obj.GetComponent<Card>().posX;
+    int targePosY = obj.GetComponent<Card>().posY;
+
+    //왼쪽 이동일때, 이동만
+    for(int i=0; i<3; i++)
     {
-      int i = moveObj.GetComponent<Card>().posNum;
-
-      if((i % 3 != 0) && (targetNum < i) && ((i/3)==(targetNum/3)))
+      for(int j=0; j<3; j++)
       {
-        moveObj.GetComponent<Card>().MoveCard(this.cardPositions[i-1]);
-        moveObj.GetComponent<Card>().posNum--;
+        GameObject moveObj = cardArr[i, j];
+        int movePosX = moveObj.GetComponent<Card>().posX;
+        int movePosY = moveObj.GetComponent<Card>().posY;
+
+        if((movePosY == targePosY) && (movePosX > targePosX))
+        {
+          StartCoroutine(WaitMove());
+          moveObj.GetComponent<Card>().MoveCard(GetCardPosition(i-1, j));
+
+          moveObj.GetComponent<Card>().posX = i-1;
+          moveObj.GetComponent<Card>().posY = j;
+          cardArr[i-1, j] = moveObj;
+          cardArr[i, j] = null;
+        }
       }
+    }
 
-      //오른쪽 맨 끝이면 그 자리에 새로운 카드 생성
-      if((i % 3 == 2) && (targetNum < i) && ((i/3)==(targetNum/3)))
+    //생성만
+    for(int i=0; i<3; i++)
+    {
+      for(int j=0; j<3; j++)
       {
-        StartCoroutine(SpawnCard(i));
+        if(cardArr[i, j] == null)
+        {
+          StartCoroutine(SpawnCard(GetCardPosition(i, j)));
+          break;
+        }
       }
     }
   } 
 
-  IEnumerator SpawnCard(int posNum)
+  IEnumerator WaitMove()
   {
     yield return new WaitForSeconds(0.5f);
-    GameObject cardEnemyObj = Instantiate(cardEnemyPrefab, cardPositions[posNum], quaternion.identity);
-    cardEnemyObj.GetComponent<Card>().posNum = posNum;
+  }
+
+  IEnumerator SpawnCard(Vector2 spawnPos)
+  {
+    yield return new WaitForSeconds(0.5f);
+    GameObject spawnObj = Instantiate(cardEnemyPrefab, spawnPos, quaternion.identity);
   }
 
   private Vector2 GetCardPosition(int x, int y)
