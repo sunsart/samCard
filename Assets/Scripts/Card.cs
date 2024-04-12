@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEditor.Tilemaps;
+using UnityEditor.Experimental.GraphView;
 
 public class Card : MonoBehaviour
 {
@@ -56,7 +57,5 @@ public class Card : MonoBehaviour
   {
     transform.DOMove(targetPos, 0.5f);
   }
-
-
 
 }

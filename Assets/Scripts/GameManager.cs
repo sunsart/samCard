@@ -61,7 +61,8 @@ public class GameManager : MonoBehaviour
       enemyObj.GetComponent<CardEnemy>().SetCardStat();
       if(enemyObj.GetComponent<CardEnemy>().healthVal <= 0)
       {
-        board.ArrangeBoard(enemyObj);
+        Destroy(enemyObj);
+        board.ArrangeBoard();
       }
 
       //player 처리 

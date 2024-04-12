@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,10 +19,16 @@ public class Board : MonoBehaviour
   }
   public Direction moveDir;
 
-  private GameObject[,] cardArr = new GameObject[3,3];
-
   [SerializeField] private GameObject cardPlayerPrefab;
   [SerializeField] private GameObject cardEnemyPrefab;
+
+  [SerializeField] private GameObject cells;
+  [SerializeField] private GameObject cards;
+
+  GameObject playerObj;
+
+  public float moveCardSpeed = 0.4f;
+  public LayerMask cardLayer;
 
 
   void Start()
@@ -31,146 +38,171 @@ public class Board : MonoBehaviour
 
   void InitBoard() 
   {
-    for(int i=0; i<3; i++)
+    for(int i=0; i<this.cells.transform.childCount; i++)
     {
-      for(int j=0; j<3; j++)
+      Vector2 position = this.cells.transform.GetChild(i).transform.position;
+
+      if(i == 4)
       {
-        Vector2 cardPosition = GetCardPosition(i, j);
-
-        if(i==1 && j==1)
-        {
-          GameObject cardPlayerObj = Instantiate(cardPlayerPrefab, cardPosition, quaternion.identity);
-          cardPlayerObj.GetComponent<Card>().posX = i;
-          cardPlayerObj.GetComponent<Card>().posY = j;
-          this.cardArr[i, j] = cardPlayerObj;
-          continue;
-        }
-
-        GameObject cardEnemyObj = Instantiate(cardEnemyPrefab, cardPosition, quaternion.identity);
-        cardEnemyObj.GetComponent<Card>().posX = i;
-        cardEnemyObj.GetComponent<Card>().posY = j;
-        this.cardArr[i, j] = cardEnemyObj;
+        GameObject playerCard = Instantiate(cardPlayerPrefab, position, quaternion.identity);
+        playerCard.transform.parent = this.cards.transform;
+        continue;
       }
-    }
-  }
 
-  public bool IsNeighbor(GameObject targetObj) 
+      GameObject enemyCard = Instantiate(cardEnemyPrefab, position, quaternion.identity);
+      enemyCard.transform.parent = this.cards.transform;
+    }
+    this.playerObj = GameObject.FindGameObjectWithTag("Player");
+  }
+ 
+  public bool IsNeighborPlayer(GameObject clickedObj)
   {
     bool isNeighbor = false;
 
-    GameObject cardPlayerObj = GameObject.FindGameObjectWithTag("Player");
-    int playerPosX = cardPlayerObj.GetComponent<Card>().posX;
-    int playerPosY = cardPlayerObj.GetComponent<Card>().posY;
+    RaycastHit2D hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.left, 2.0f, LayerMask.GetMask("Card"));
+    if(hit.collider != null && hit.collider.tag == "Player")
+    {
+      Debug.Log(" 오른쪽에 있음");
+      this.moveDir = Direction.Right;
+      isNeighbor = true;
+      return isNeighbor;
+    }
 
-    int targetPosX = targetObj.GetComponent<Card>().posX;
-    int targetPosY = targetObj.GetComponent<Card>().posY;
+    hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.right, 2.0f, LayerMask.GetMask("Card"));
+    if(hit.collider != null && hit.collider.tag == "Player")
+    {
+      Debug.Log(" 왼쪽에 있음");
+      this.moveDir = Direction.Left;
+      isNeighbor = true;
+      return isNeighbor;
+    }
 
-    //0,0  1,0  2,0
-    //0,1  1,1  2,1
-    //0,2  1,2  2,2
+    hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.up, 2.0f, LayerMask.GetMask("Card"));
+    if(hit.collider != null && hit.collider.tag == "Player")
+    {
+      Debug.Log(" 아래쪽에 있음");
+      this.moveDir = Direction.Down;
+      isNeighbor = true;
+      return isNeighbor;
+    }
 
-    if ((playerPosY==targetPosY) && (playerPosX-targetPosX==1))
+    hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Card"));
+    if(hit.collider != null && hit.collider.tag == "Player")
     {
-      moveDir = Direction.Left;
+      Debug.Log(" 위쪽에 있음");
+      this.moveDir = Direction.Up;
       isNeighbor = true;
-      Debug.Log("왼쪽");
-    } 
-    else if ((playerPosY==targetPosY) && (playerPosX-targetPosX==-1))
-    {
-      moveDir = Direction.Right;
-      isNeighbor = true;
-      Debug.Log("오른쪽");
+      return isNeighbor;
     }
-    else if ((playerPosX==targetPosX) && (playerPosY-targetPosY==1))
-    {
-      moveDir = Direction.Up;
-      isNeighbor = true;
-      Debug.Log("위쪽");
-    }
-    else if ((playerPosX==targetPosX) && (playerPosY-targetPosY==-1))
-    {
-      moveDir = Direction.Down;
-      isNeighbor = true;
-      Debug.Log("아래쪽");
-    }
-    else 
-    {
-      Debug.Log("떨어져 있음");
-    }
+
     return isNeighbor;
   }
- 
-  public void ArrangeBoard(GameObject obj)
+
+  public void ArrangeBoard()
   {
-    Destroy(obj);
+      MoveCard();
+  }
 
-    int targePosX = obj.GetComponent<Card>().posX;
-    int targePosY = obj.GetComponent<Card>().posY;
-
-    //왼쪽 이동일때, 이동만
-    for(int i=0; i<3; i++)
+  private void MoveCard()
+  {
+    for(int i=0; i<this.cards.transform.childCount; i++)
     {
-      for(int j=0; j<3; j++)
+      GameObject obj = this.cards.transform.GetChild(i).gameObject;
+      if(CanMoveDirection(obj))
       {
-        GameObject moveObj = cardArr[i, j];
-        int movePosX = moveObj.GetComponent<Card>().posX;
-        int movePosY = moveObj.GetComponent<Card>().posY;
-
-        if((movePosY == targePosY) && (movePosX > targePosX))
+        Vector2 movePos;
+        if(this.moveDir == Direction.Left)
         {
-          StartCoroutine(WaitMove());
-          moveObj.GetComponent<Card>().MoveCard(GetCardPosition(i-1, j));
-
-          moveObj.GetComponent<Card>().posX = i-1;
-          moveObj.GetComponent<Card>().posY = j;
-          cardArr[i-1, j] = moveObj;
-          cardArr[i, j] = null;
+          movePos = new Vector2(obj.transform.position.x - 2f, obj.transform.position.y);
+          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          return;
+        }
+        else if(this.moveDir == Direction.Right)
+        {
+          movePos = new Vector2(obj.transform.position.x + 2f, obj.transform.position.y);
+          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          return;
+        }
+        else if(this.moveDir == Direction.Up)
+        {
+          movePos = new Vector2(obj.transform.position.x, obj.transform.position.y + 2.5f);
+          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          return;
+        }
+        else if(this.moveDir == Direction.Down)
+        {
+          movePos = new Vector2(obj.transform.position.x, obj.transform.position.y - 2.5f);
+          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          return;
         }
       }
     }
+    //더 이상 이동할 카드가 없으면
+    SpawnCardEmptyCell();
+  }
 
-    //생성만
-    for(int i=0; i<3; i++)
+  public bool CanMoveDirection(GameObject obj)
+  {
+    bool canMove = false;
+
+    RaycastHit2D hit;
+    if(this.moveDir == Direction.Left)
     {
-      for(int j=0; j<3; j++)
+      hit = Physics2D.Raycast(obj.transform.position, Vector2.left, 2.0f, LayerMask.GetMask("Card"));
+      if(hit.collider == null)
       {
-        if(cardArr[i, j] == null)
-        {
-          StartCoroutine(SpawnCard(GetCardPosition(i, j)));
-          break;
-        }
+        Debug.Log(" 이동가능");
+        canMove = true;
+        return canMove;
       }
     }
-  } 
+    else if(this.moveDir == Direction.Right)
+    {
+      hit = Physics2D.Raycast(obj.transform.position, Vector2.right, 2.0f, LayerMask.GetMask("Card"));
+      if(hit.collider == null)
+      {
+        Debug.Log(" 이동가능");
+        canMove = true;
+        return canMove;
+      }
+    }
+    else if(this.moveDir == Direction.Up)
+    {
+      hit = Physics2D.Raycast(obj.transform.position, Vector2.up, 2.0f, LayerMask.GetMask("Card"));
+      if(hit.collider == null)
+      {
+        Debug.Log(" 이동가능");
+        canMove = true;
+        return canMove;
+      }
+    }
+    else if(this.moveDir == Direction.Down)
+    {
+      hit = Physics2D.Raycast(obj.transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Card"));
+      if(hit.collider == null)
+      {
+        Debug.Log(" 이동가능");
+        canMove = true;
+        return canMove;
+      }
+    }
 
-  IEnumerator WaitMove()
-  {
-    yield return new WaitForSeconds(0.5f);
+    return canMove; 
   }
 
-  IEnumerator SpawnCard(Vector2 spawnPos)
+  //비어있는 cell 에 새로운 카드를 생성함
+  private void SpawnCardEmptyCell()
   {
-    yield return new WaitForSeconds(0.5f);
-    GameObject spawnObj = Instantiate(cardEnemyPrefab, spawnPos, quaternion.identity);
-  }
-
-  private Vector2 GetCardPosition(int x, int y)
-  {
-    //x=0 -2
-    //x=1 0
-    //x=2 2
-
-    //y=0 2.5
-    //y=1 0
-    //y=2 -2.5
-
-    float spaceX = 2f;
-    float spaceY = -2.5f;
-
-    float posX = (x-1) * spaceX;
-    float posY = (y-1) * spaceY;
-
-    return new Vector2(posX, posY);
+    for(int i=0; i<this.cells.transform.childCount; i++) 
+    {
+      GameObject obj = this.cells.transform.GetChild(i).gameObject;
+      if(Physics2D.OverlapCircle(obj.transform.position, 0.5f, cardLayer) == false)
+      {
+        GameObject enemyCard = Instantiate(cardEnemyPrefab, obj.transform.position, quaternion.identity);
+        enemyCard.transform.parent = this.cards.transform;
+        return;
+      }
+    }
   }
 
 }

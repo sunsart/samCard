@@ -18,6 +18,11 @@ public class CardEnemy : Card
     Invoke("FlipCard", 0.5f);
   }
 
+  void Update()
+  {
+    //Debug.DrawRay(transform.position, Vector2.left * 2, new Color(1,0,0));
+  }
+
   public void SetCardStat()
   {
     textHealth.text = healthVal.ToString();
@@ -29,7 +34,7 @@ public class CardEnemy : Card
       return;
 
     //플레이어와 이웃 여부 확인
-    if(GameManager.instance.board.IsNeighbor(gameObject))
+    if(GameManager.instance.board.IsNeighborPlayer(gameObject))
     {
       GameManager.instance.TakeBattle(gameObject);
     }

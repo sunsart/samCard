@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class CardPlayer : Card
 {
-  [HideInInspector] public int healthVal = 10;
+  [HideInInspector] public int healthVal = 100;
   [HideInInspector] public int attackVal = 5;
 
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8320835149503910628}
   - component: {fileID: 1090899005644846794}
   - component: {fileID: 1897373662584399383}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TextHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7604344347899773877}
   - component: {fileID: 215305443195502296}
   - component: {fileID: 4807304976083440879}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -352,4 +352,5 @@ MonoBehaviour:
   textAttack: {fileID: 0}
   posX: 0
   posY: 0
+  posNum: 0
   healthVal: 9

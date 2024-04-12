@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4204115196273246018}
   - component: {fileID: 2164791346389819814}
   - component: {fileID: 5081596560131769842}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -182,6 +182,7 @@ MonoBehaviour:
   textAttack: {fileID: 8455602635814493798}
   posX: 0
   posY: 0
+  posNum: 0
   healthVal: 10
   attackVal: 5
 --- !u!1 &4383502821032685328
@@ -195,7 +196,7 @@ GameObject:
   - component: {fileID: 1928589639973339392}
   - component: {fileID: 3349441691643583048}
   - component: {fileID: 8455602635814493798}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TextAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +367,7 @@ GameObject:
   - component: {fileID: 1740740186015006696}
   - component: {fileID: 3507990181469466505}
   - component: {fileID: 4050642208381741553}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TextHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
