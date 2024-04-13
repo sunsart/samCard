@@ -5,8 +5,8 @@ using DG.Tweening;
 
 public class CardPlayer : Card
 {
-  [HideInInspector] public int healthVal = 100;
-  [HideInInspector] public int attackVal = 5;
+  public int healthVal = 100;
+  public int attackVal = 5;
 
 
   void Start() 
@@ -17,7 +17,7 @@ public class CardPlayer : Card
     textHealth.alpha = 0f;
     textAttack.alpha = 0f;
 
-    Invoke("FlipCard", 0.5f);
+    Invoke("FlipCard", Settings.flipDelay);
   }
 
   public void SetCardStat()
@@ -34,7 +34,7 @@ public class CardPlayer : Card
 
   public void ClickedCard() 
   {
-    if(isFlipping == true)
+    if(isFlipping == true || GameManager.instance.board.isCardsMoving == true)
       return;
 
     Debug.Log("주인공 카드 클릭...");

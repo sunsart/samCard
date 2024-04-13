@@ -15,7 +15,7 @@ public class CardEnemy : Card
     //카드생성시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안되기때문
     textHealth.alpha = 0f;
 
-    Invoke("FlipCard", 0.5f);
+    Invoke("FlipCard", Settings.flipDelay);
   }
 
   void Update()
@@ -30,7 +30,7 @@ public class CardEnemy : Card
 
   public void ClickedCard() 
   {
-    if(isFlipping == true)
+    if(isFlipping == true || GameManager.instance.board.isCardsMoving == true)
       return;
 
     //플레이어와 이웃 여부 확인

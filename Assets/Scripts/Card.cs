@@ -15,16 +15,10 @@ public class Card : MonoBehaviour
   [SerializeField] protected TextMeshPro textHealth;
   [SerializeField] protected TextMeshPro textAttack;
 
-  [HideInInspector] public int posX;
-  [HideInInspector] public int posY;
-
-  [HideInInspector] public int posNum;
-
   protected bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
-  protected bool isFlipping = false;  // 앞면으로 뒤집어지는중인지 여부
+  protected bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
 
-
-  //기본적인 카드의 flip, moveTo ...
+  
   void Start()
   {
     //자식카드에서 구현
@@ -36,7 +30,7 @@ public class Card : MonoBehaviour
 
     Vector3 originalScale = transform.localScale;
     Vector3 targetScale = new Vector3(0f, originalScale.y, originalScale.z);
-    transform.DOScale(targetScale, 0.2f).OnComplete(() => 
+    transform.DOScale(targetScale, Settings.flipSpeed).OnComplete(() => 
     {
       isFlipped = !isFlipped;
 
@@ -45,17 +39,13 @@ public class Card : MonoBehaviour
         spriteRenderer.sprite = frontSprite;
 
         textHealth.alpha = 1f;
+        
         if(textAttack != null)
           textAttack.alpha = 1f;
       }
 
-        transform.DOScale(originalScale, 0.2f).OnComplete(() => { isFlipping = false; });
+        transform.DOScale(originalScale, Settings.flipSpeed).OnComplete(() => { isFlipping = false; });
     });
-  }
-
-  public void MoveCard(Vector2 targetPos)
-  {
-    transform.DOMove(targetPos, 0.5f);
   }
 
 }

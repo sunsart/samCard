@@ -26,9 +26,8 @@ public class Board : MonoBehaviour
   [SerializeField] private GameObject cards;
 
   GameObject playerObj;
-
-  public float moveCardSpeed = 0.4f;
   public LayerMask cardLayer;
+  public bool isCardsMoving = false;
 
 
   void Start()
@@ -105,6 +104,9 @@ public class Board : MonoBehaviour
 
   private void MoveCard()
   {
+    //카드 이동중에는 카드 터치를 먹으면 안됨
+    this.isCardsMoving = true;
+
     for(int i=0; i<this.cards.transform.childCount; i++)
     {
       GameObject obj = this.cards.transform.GetChild(i).gameObject;
@@ -114,25 +116,25 @@ public class Board : MonoBehaviour
         if(this.moveDir == Direction.Left)
         {
           movePos = new Vector2(obj.transform.position.x - 2f, obj.transform.position.y);
-          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          obj.transform.DOMove(movePos, Settings.moveCardSpeed).OnComplete(MoveCard);
           return;
         }
         else if(this.moveDir == Direction.Right)
         {
           movePos = new Vector2(obj.transform.position.x + 2f, obj.transform.position.y);
-          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          obj.transform.DOMove(movePos, Settings.moveCardSpeed).OnComplete(MoveCard);
           return;
         }
         else if(this.moveDir == Direction.Up)
         {
           movePos = new Vector2(obj.transform.position.x, obj.transform.position.y + 2.5f);
-          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          obj.transform.DOMove(movePos, Settings.moveCardSpeed).OnComplete(MoveCard);
           return;
         }
         else if(this.moveDir == Direction.Down)
         {
           movePos = new Vector2(obj.transform.position.x, obj.transform.position.y - 2.5f);
-          obj.transform.DOMove(movePos, moveCardSpeed).OnComplete(MoveCard);
+          obj.transform.DOMove(movePos, Settings.moveCardSpeed).OnComplete(MoveCard);
           return;
         }
       }
@@ -200,6 +202,8 @@ public class Board : MonoBehaviour
       {
         GameObject enemyCard = Instantiate(cardEnemyPrefab, obj.transform.position, quaternion.identity);
         enemyCard.transform.parent = this.cards.transform;
+
+        this.isCardsMoving = false;
         return;
       }
     }

@@ -183,7 +183,7 @@ MonoBehaviour:
   posX: 0
   posY: 0
   posNum: 0
-  healthVal: 10
+  healthVal: 50
   attackVal: 5
 --- !u!1 &4383502821032685328
 GameObject:
