@@ -1856,12 +1856,13 @@ MonoBehaviour:
   moveDir: 0
   cardPlayerPrefab: {fileID: 3471969550751204456, guid: 54b9bf405ec063f41a47e93203044a93, type: 3}
   cardEnemyPrefab: {fileID: 7877262044788101972, guid: dac640810e918ec44999a70a9a640a95, type: 3}
+  cardMeatPrefab: {fileID: 4106020461603353979, guid: cf135a29cfb5180428720acd70f7dd1d, type: 3}
   cells: {fileID: 1821174861}
   cards: {fileID: 2021022656}
-  moveCardSpeed: 0.4
   cardLayer:
     serializedVersion: 2
     m_Bits: 128
+  isCardsMoving: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

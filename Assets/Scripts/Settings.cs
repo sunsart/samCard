@@ -9,6 +9,8 @@ public class Settings
     static public float flipSpeed = 0.15f;  // 카드 뒤집는 스피드 
     
     static public float moveCardSpeed = 0.4f;   //카드 이동속도
+
+    static public int playerMaxHealth = 12;
     
     #endregion
 }

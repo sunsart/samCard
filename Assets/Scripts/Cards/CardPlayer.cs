@@ -13,11 +13,11 @@ public class CardPlayer : MonoBehaviour
   [SerializeField] protected TextMeshPro textHealth;
   [SerializeField] protected TextMeshPro textAttack;
 
-  protected bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
-  protected bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
+  private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
+  private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
 
-  public int healthVal = 100;
-  public int attackVal = 5;
+  public int healthVal;
+  public int attackVal;
 
 
   void Start() 
@@ -31,20 +31,30 @@ public class CardPlayer : MonoBehaviour
 
   public void SetCardStat()
   {
-    textHealth.text = healthVal.ToString();
-    textAttack.text = attackVal.ToString();
+    // 최대 체력 limit
+    if(healthVal >= Settings.playerMaxHealth)
+      healthVal = Settings.playerMaxHealth;
 
-    // healthVal 값에 따라 텍스트 visible 조정
+    // healthVal 값 설정
     if(healthVal > 0)
       textHealth.alpha = 1f;
-    else
+    else {
       textHealth.alpha = 0f;
+      Destroy(gameObject);
+      
+      //게임오버
+    }
 
-    // attackVal 값에 따라 텍스트 visible 조정
-    if(attackVal > 0)
+    // attackVal 값 설정
+    if(attackVal > 0) {
       textAttack.alpha = 1f;
-    else
+    } else {
+      attackVal = 0;
       textAttack.alpha = 0f;
+    }
+
+    textHealth.text = healthVal.ToString();
+    textAttack.text = attackVal.ToString();
   }
 
   public void ClickedCard() 

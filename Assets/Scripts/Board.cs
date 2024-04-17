@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
 
   [SerializeField] private GameObject cardPlayerPrefab;
   [SerializeField] private GameObject cardEnemyPrefab;
+  [SerializeField] private GameObject cardMeatPrefab;
 
   [SerializeField] private GameObject cells;
   [SerializeField] private GameObject cards;
@@ -48,6 +49,13 @@ public class Board : MonoBehaviour
         continue;
       }
 
+      if(i == 5)
+      {
+        GameObject meatCard = Instantiate(cardMeatPrefab, position, quaternion.identity);
+        meatCard.transform.parent = this.cards.transform;
+        continue;
+      }
+
       GameObject enemyCard = Instantiate(cardEnemyPrefab, position, quaternion.identity);
       enemyCard.transform.parent = this.cards.transform;
     }
@@ -61,7 +69,7 @@ public class Board : MonoBehaviour
     RaycastHit2D hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.left, 2.0f, LayerMask.GetMask("Card"));
     if(hit.collider != null && hit.collider.tag == "Player")
     {
-      Debug.Log(" 오른쪽에 있음");
+      //Debug.Log(" 오른쪽에 있음");
       this.moveDir = Direction.Right;
       isNeighbor = true;
       return isNeighbor;
@@ -70,7 +78,7 @@ public class Board : MonoBehaviour
     hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.right, 2.0f, LayerMask.GetMask("Card"));
     if(hit.collider != null && hit.collider.tag == "Player")
     {
-      Debug.Log(" 왼쪽에 있음");
+      //Debug.Log(" 왼쪽에 있음");
       this.moveDir = Direction.Left;
       isNeighbor = true;
       return isNeighbor;
@@ -79,7 +87,7 @@ public class Board : MonoBehaviour
     hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.up, 2.0f, LayerMask.GetMask("Card"));
     if(hit.collider != null && hit.collider.tag == "Player")
     {
-      Debug.Log(" 아래쪽에 있음");
+      //Debug.Log(" 아래쪽에 있음");
       this.moveDir = Direction.Down;
       isNeighbor = true;
       return isNeighbor;
@@ -88,7 +96,7 @@ public class Board : MonoBehaviour
     hit = Physics2D.Raycast(clickedObj.transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Card"));
     if(hit.collider != null && hit.collider.tag == "Player")
     {
-      Debug.Log(" 위쪽에 있음");
+      //Debug.Log(" 위쪽에 있음");
       this.moveDir = Direction.Up;
       isNeighbor = true;
       return isNeighbor;
@@ -139,6 +147,7 @@ public class Board : MonoBehaviour
         }
       }
     }
+    
     //더 이상 이동할 카드가 없으면
     SpawnCardEmptyCell();
   }
@@ -153,7 +162,7 @@ public class Board : MonoBehaviour
       hit = Physics2D.Raycast(obj.transform.position, Vector2.left, 2.0f, LayerMask.GetMask("Card"));
       if(hit.collider == null)
       {
-        Debug.Log(" 이동가능");
+        //Debug.Log(" 이동가능");
         canMove = true;
         return canMove;
       }
@@ -163,7 +172,7 @@ public class Board : MonoBehaviour
       hit = Physics2D.Raycast(obj.transform.position, Vector2.right, 2.0f, LayerMask.GetMask("Card"));
       if(hit.collider == null)
       {
-        Debug.Log(" 이동가능");
+        //Debug.Log(" 이동가능");
         canMove = true;
         return canMove;
       }
@@ -173,7 +182,7 @@ public class Board : MonoBehaviour
       hit = Physics2D.Raycast(obj.transform.position, Vector2.up, 2.0f, LayerMask.GetMask("Card"));
       if(hit.collider == null)
       {
-        Debug.Log(" 이동가능");
+        //Debug.Log(" 이동가능");
         canMove = true;
         return canMove;
       }
@@ -183,7 +192,7 @@ public class Board : MonoBehaviour
       hit = Physics2D.Raycast(obj.transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Card"));
       if(hit.collider == null)
       {
-        Debug.Log(" 이동가능");
+        //Debug.Log(" 이동가능");
         canMove = true;
         return canMove;
       }

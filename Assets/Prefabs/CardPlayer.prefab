@@ -180,10 +180,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 4916992458826656444}
   textHealth: {fileID: 4050642208381741553}
   textAttack: {fileID: 8455602635814493798}
-  posX: 0
-  posY: 0
-  posNum: 0
-  healthVal: 50
+  healthVal: 10
   attackVal: 5
 --- !u!1 &4383502821032685328
 GameObject:
