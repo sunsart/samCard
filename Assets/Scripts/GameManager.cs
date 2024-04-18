@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
   public PoolManager pool;
   
   [HideInInspector] public int turn = 0;
+  [HideInInspector] public bool isGamePlay = true;
 
 
   void Awake()

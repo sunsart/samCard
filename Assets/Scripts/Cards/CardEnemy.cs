@@ -18,20 +18,20 @@ public class CardEnemy : MonoBehaviour
   public int healthVal;
 
 
-  // void Start() 
-  // {
-  //   // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-  //   textHealth.alpha = 0f;
-
-  //   Invoke("FlipCard", Settings.flipDelay);
-  // }
-
   void OnEnable()
   {
+    // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
     textHealth.alpha = 0f;
-    this.healthVal = 8;
-    spriteRenderer.sprite = backSprite;
+
+    // 카드 능력치 설정
+    SetCardValue();
+
     Invoke("FlipCard", Settings.flipDelay);
+  }
+
+  void SetCardValue()
+  {
+    this.healthVal = 6;
   }
 
   public void SetCardStat()
@@ -43,14 +43,25 @@ public class CardEnemy : MonoBehaviour
       textHealth.alpha = 1f;
     else {
       textHealth.alpha = 0f;
-      gameObject.SetActive(false);
-      GameManager.instance.board.ArrangeBoard();
+      DieCard();
     }
+  }
+
+  private void DieCard()
+  {
+    //삭제하지 않고 비활성화
+    gameObject.SetActive(false);
+    spriteRenderer.sprite = backSprite;
+    isFlipped = !isFlipped;
+    GameManager.instance.board.ArrangeBoard();
   }
 
   public void ClickedCard() 
   {
-    if(isFlipping == true || GameManager.instance.board.isCardsMoving == true)
+    if( isFlipping == true || 
+        GameManager.instance.board.isCardsMoving == true ||
+        GameManager.instance.isGamePlay == false
+      )
       return;
 
     //플레이어와 이웃 여부 확인

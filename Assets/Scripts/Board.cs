@@ -19,10 +19,6 @@ public class Board : MonoBehaviour
   }
   public Direction moveDir;
 
-  [SerializeField] private GameObject cardPlayerPrefab;
-  [SerializeField] private GameObject cardEnemyPrefab;
-  [SerializeField] private GameObject cardMeatPrefab;
-
   [SerializeField] private GameObject cells;
   [SerializeField] private GameObject cards;
 

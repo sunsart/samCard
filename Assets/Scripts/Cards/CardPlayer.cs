@@ -40,9 +40,9 @@ public class CardPlayer : MonoBehaviour
       textHealth.alpha = 1f;
     else {
       textHealth.alpha = 0f;
-      Destroy(gameObject);
-      
+
       //게임오버
+      GameManager.instance.isGamePlay = false;
     }
 
     // attackVal 값 설정
