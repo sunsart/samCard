@@ -49,10 +49,17 @@ public class CardEnemy : MonoBehaviour
 
   private void DieCard()
   {
-    //삭제하지 않고 비활성화
+    // 삭제하지 않고 비활성화
     gameObject.SetActive(false);
+
+    // 다시 뒷면으로 돌려놓음
     spriteRenderer.sprite = backSprite;
     isFlipped = !isFlipped;
+
+    // 부모오브젝트(cards)에서 제거 
+    transform.SetParent(null);
+
+    // 카드 재정렬
     GameManager.instance.board.ArrangeBoard();
   }
 
@@ -64,7 +71,7 @@ public class CardEnemy : MonoBehaviour
       )
       return;
 
-    //플레이어와 이웃 여부 확인
+    // 플레이어와 이웃 여부 확인
     if(GameManager.instance.board.IsNeighborPlayer(gameObject)) {
       GameManager.instance.CountTurn();
       ActionThisCard();
