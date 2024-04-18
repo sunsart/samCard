@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
   public static GameManager instance;
   public Board board;
+  public PoolManager pool;
   
   [HideInInspector] public int turn = 0;
 

@@ -19,11 +19,19 @@ public class CardMeat : MonoBehaviour
   public int addHealthVal;
 
 
-  void Start() 
-  {
-    // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-    textAddHealth.alpha = 0f;
+  // void Start() 
+  // {
+  //   // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
+  //   textAddHealth.alpha = 0f;
 
+  //   Invoke("FlipCard", Settings.flipDelay);
+  // }
+
+  void OnEnable()
+  {
+    textAddHealth.alpha = 0f;
+    this.addHealthVal = 4;
+    spriteRenderer.sprite = backSprite;
     Invoke("FlipCard", Settings.flipDelay);
   }
 
@@ -36,7 +44,7 @@ public class CardMeat : MonoBehaviour
       textAddHealth.alpha = 1f;
     } else {
       textAddHealth.alpha = 0f;
-      Destroy(gameObject);
+      gameObject.SetActive(false);
       GameManager.instance.board.ArrangeBoard();
     }
   }

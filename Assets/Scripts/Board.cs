@@ -44,22 +44,16 @@ public class Board : MonoBehaviour
 
       if(i == 4)
       {
-        GameObject playerCard = Instantiate(cardPlayerPrefab, position, quaternion.identity);
+        GameObject playerCard = GameManager.instance.pool.GetObjectFromPoll(0, position);
         playerCard.transform.parent = this.cards.transform;
+        this.playerObj = playerCard;
         continue;
       }
 
-      if(i == 5)
-      {
-        GameObject meatCard = Instantiate(cardMeatPrefab, position, quaternion.identity);
-        meatCard.transform.parent = this.cards.transform;
-        continue;
-      }
-
-      GameObject enemyCard = Instantiate(cardEnemyPrefab, position, quaternion.identity);
-      enemyCard.transform.parent = this.cards.transform;
+      int randNum = UnityEngine.Random.Range(1, 3);
+      GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, position);
+      card.transform.parent = this.cards.transform;
     }
-    this.playerObj = GameObject.FindGameObjectWithTag("Player");
   }
  
   public bool IsNeighborPlayer(GameObject clickedObj)
@@ -114,6 +108,8 @@ public class Board : MonoBehaviour
   {
     //카드 이동중에는 카드 터치를 먹으면 안됨
     this.isCardsMoving = true;
+
+    //Debug.Log("card count : " + this.cards.transform.childCount);
 
     for(int i=0; i<this.cards.transform.childCount; i++)
     {
@@ -209,8 +205,9 @@ public class Board : MonoBehaviour
       GameObject obj = this.cells.transform.GetChild(i).gameObject;
       if(Physics2D.OverlapCircle(obj.transform.position, 0.5f, cardLayer) == false)
       {
-        GameObject enemyCard = Instantiate(cardEnemyPrefab, obj.transform.position, quaternion.identity);
-        enemyCard.transform.parent = this.cards.transform;
+        int randNum = UnityEngine.Random.Range(1, 3);
+        GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, obj.transform.position);
+        card.transform.parent = this.cards.transform;
 
         this.isCardsMoving = false;
         return;
