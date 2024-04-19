@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System;
 
-public class CardBarrier : MonoBehaviour
+public class CardPoison : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
@@ -31,7 +32,7 @@ public class CardBarrier : MonoBehaviour
 
   void SetCardValue()
   {
-    this.minusHealthVal = UnityEngine.Random.Range(1, 5);
+    this.minusHealthVal = UnityEngine.Random.Range(2, 4);
   }
 
   public void SetCardStat()
@@ -39,9 +40,9 @@ public class CardBarrier : MonoBehaviour
     textMinusHealth.text = minusHealthVal.ToString();
 
     // minusHealthVal 값 설정
-    if(minusHealthVal > 0)
+    if(minusHealthVal > 0) {
       textMinusHealth.alpha = 1f;
-    else {
+    } else {
       textMinusHealth.alpha = 0f;
       DieCard();
     }
@@ -72,7 +73,8 @@ public class CardBarrier : MonoBehaviour
       return;
 
     // 플레이어와 이웃 여부 확인
-    if(GameManager.instance.board.IsNeighborPlayer(gameObject)) {
+    if(GameManager.instance.board.IsNeighborPlayer(gameObject))
+    {
       GameManager.instance.CountTurn();
       ActionThisCard();
     }
@@ -80,18 +82,15 @@ public class CardBarrier : MonoBehaviour
 
   private void ActionThisCard()
   {
-    //player 값 변경
     GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    playerObj.GetComponent<CardPlayer>().healthVal -= this.minusHealthVal;
-    playerObj.GetComponent<CardPlayer>().SetCardStat();
 
-    // 독우물효과 제거
-    playerObj.GetComponent<CardPlayer>().minusHealthByTurn = 0;
+    // 독우물 > 독우물 : 중복효과 가능
+    playerObj.GetComponent<CardPlayer>().minusHealthByTurn += this.minusHealthVal;
 
-    // 만두효과 제거
+    // 만두 > 독우물 : 만두효과 제거
     playerObj.GetComponent<CardPlayer>().addHealthByTurn = 0;
 
-    //meat 값 변경
+    // minusHealthVal 값 변경
     this.minusHealthVal = 0;
     this.SetCardStat();
   }

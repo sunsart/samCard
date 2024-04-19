@@ -46,7 +46,7 @@ public class Board : MonoBehaviour
         continue;
       }
 
-      int randNum = UnityEngine.Random.Range(1, 6);
+      int randNum = UnityEngine.Random.Range(1, 7);
       GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, position);
       card.transform.parent = this.cards.transform;
     }
@@ -201,7 +201,7 @@ public class Board : MonoBehaviour
       GameObject obj = this.cells.transform.GetChild(i).gameObject;
       if(Physics2D.OverlapCircle(obj.transform.position, 0.5f, cardLayer) == false)
       {
-        int randNum = UnityEngine.Random.Range(1, 6);
+        int randNum = UnityEngine.Random.Range(1, 7);
         GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, obj.transform.position);
         card.transform.parent = this.cards.transform;
 

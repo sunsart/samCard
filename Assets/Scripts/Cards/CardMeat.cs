@@ -87,6 +87,12 @@ public class CardMeat : MonoBehaviour
     playerObj.GetComponent<CardPlayer>().healthVal += this.addHealthVal;
     playerObj.GetComponent<CardPlayer>().SetCardStat();
 
+    // 독우물효과 제거
+    playerObj.GetComponent<CardPlayer>().minusHealthByTurn = 0;
+
+    // 만두효과 제거
+    playerObj.GetComponent<CardPlayer>().addHealthByTurn = 0;
+
     // meat 값 변경
     this.addHealthVal = 0;
     this.SetCardStat();

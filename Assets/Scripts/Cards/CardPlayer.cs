@@ -84,7 +84,7 @@ public class CardPlayer : MonoBehaviour
     {
       this.healthVal--;
       this.SetCardStat();
-      this.addHealthByTurn--;
+      this.minusHealthByTurn--;
     }
   }
 
