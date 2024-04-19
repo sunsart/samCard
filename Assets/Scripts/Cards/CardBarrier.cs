@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-using System;
 
-public class CardMeat : MonoBehaviour
+public class CardBarrier : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] protected TextMeshPro textAddHealth;
+  [SerializeField] protected TextMeshPro textMinusHealth;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
 
-  private int addHealthVal;
+  private int minusHealthVal;
 
 
   void OnEnable()
   {
     // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-    textAddHealth.alpha = 0f;
+    textMinusHealth.alpha = 0f;
 
     // 카드 능력치 설정
     SetCardValue();
@@ -32,18 +31,18 @@ public class CardMeat : MonoBehaviour
 
   void SetCardValue()
   {
-    this.addHealthVal = UnityEngine.Random.Range(2, 6);
+    this.minusHealthVal = UnityEngine.Random.Range(1, 5);
   }
 
   public void SetCardStat()
   {
-    textAddHealth.text = addHealthVal.ToString();
+    textMinusHealth.text = minusHealthVal.ToString();
 
-    // addHealthVal 값 설정
-    if(addHealthVal > 0) {
-      textAddHealth.alpha = 1f;
-    } else {
-      textAddHealth.alpha = 0f;
+    // minusHealthVal 값 설정
+    if(minusHealthVal > 0)
+      textMinusHealth.alpha = 1f;
+    else {
+      textMinusHealth.alpha = 0f;
       DieCard();
     }
   }
@@ -73,8 +72,7 @@ public class CardMeat : MonoBehaviour
       return;
 
     // 플레이어와 이웃 여부 확인
-    if(GameManager.instance.board.IsNeighborPlayer(gameObject))
-    {
+    if(GameManager.instance.board.IsNeighborPlayer(gameObject)) {
       GameManager.instance.CountTurn();
       ActionThisCard();
     }
@@ -82,13 +80,13 @@ public class CardMeat : MonoBehaviour
 
   private void ActionThisCard()
   {
-    // player 값 변경
+    //player 값 변경
     GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    playerObj.GetComponent<CardPlayer>().healthVal += this.addHealthVal;
+    playerObj.GetComponent<CardPlayer>().healthVal -= this.minusHealthVal;
     playerObj.GetComponent<CardPlayer>().SetCardStat();
 
-    // meat 값 변경
-    this.addHealthVal = 0;
+    //meat 값 변경
+    this.minusHealthVal = 0;
     this.SetCardStat();
   }
 

@@ -5,24 +5,24 @@ using DG.Tweening;
 using TMPro;
 using System;
 
-public class CardMeat : MonoBehaviour
+public class CardCoin : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] protected TextMeshPro textAddHealth;
+  [SerializeField] protected TextMeshPro textAddCoin;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
 
-  private int addHealthVal;
+  private int addCoinVal;
 
 
   void OnEnable()
   {
     // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-    textAddHealth.alpha = 0f;
+    textAddCoin.alpha = 0f;
 
     // 카드 능력치 설정
     SetCardValue();
@@ -32,18 +32,18 @@ public class CardMeat : MonoBehaviour
 
   void SetCardValue()
   {
-    this.addHealthVal = UnityEngine.Random.Range(2, 6);
+    this.addCoinVal = UnityEngine.Random.Range(2, 10);
   }
 
   public void SetCardStat()
   {
-    textAddHealth.text = addHealthVal.ToString();
+    textAddCoin.text = addCoinVal.ToString();
 
-    // addHealthVal 값 설정
-    if(addHealthVal > 0) {
-      textAddHealth.alpha = 1f;
+    // addCoinVal 값 설정
+    if(addCoinVal > 0) {
+      textAddCoin.alpha = 1f;
     } else {
-      textAddHealth.alpha = 0f;
+      textAddCoin.alpha = 0f;
       DieCard();
     }
   }
@@ -82,13 +82,12 @@ public class CardMeat : MonoBehaviour
 
   private void ActionThisCard()
   {
-    // player 값 변경
-    GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    playerObj.GetComponent<CardPlayer>().healthVal += this.addHealthVal;
-    playerObj.GetComponent<CardPlayer>().SetCardStat();
+    // GameManager coin 값 변경
+    GameManager.instance.coin += addCoinVal;
+    GameManager.instance.SetUiText();
 
     // meat 값 변경
-    this.addHealthVal = 0;
+    this.addCoinVal = 0;
     this.SetCardStat();
   }
 

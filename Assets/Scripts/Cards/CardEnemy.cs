@@ -31,7 +31,7 @@ public class CardEnemy : MonoBehaviour
 
   void SetCardValue()
   {
-    this.healthVal = 6;
+    this.healthVal = UnityEngine.Random.Range(2, 10);
   }
 
   public void SetCardStat()

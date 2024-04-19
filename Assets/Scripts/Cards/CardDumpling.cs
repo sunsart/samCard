@@ -5,7 +5,7 @@ using DG.Tweening;
 using TMPro;
 using System;
 
-public class CardMeat : MonoBehaviour
+public class CardDumpling : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
@@ -82,12 +82,15 @@ public class CardMeat : MonoBehaviour
 
   private void ActionThisCard()
   {
-    // player 값 변경
     GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    playerObj.GetComponent<CardPlayer>().healthVal += this.addHealthVal;
-    playerObj.GetComponent<CardPlayer>().SetCardStat();
 
-    // meat 값 변경
+    // 만두 > 만두 : 중복효과 가능
+    playerObj.GetComponent<CardPlayer>().addHealthByTurn += this.addHealthVal;
+
+    // 독우물 > 만두 : 독우물효과 제거
+    playerObj.GetComponent<CardPlayer>().minusHealthByTurn = 0;
+
+    // addHealthVal 값 변경
     this.addHealthVal = 0;
     this.SetCardStat();
   }

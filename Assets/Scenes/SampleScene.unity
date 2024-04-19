@@ -582,7 +582,7 @@ GameObject:
   - component: {fileID: 580648348}
   - component: {fileID: 580648347}
   m_Layer: 5
-  m_Name: TextGold
+  m_Name: TextCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,7 +627,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -654,15 +654,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -737,6 +737,9 @@ MonoBehaviour:
   - {fileID: 3471969550751204456, guid: 54b9bf405ec063f41a47e93203044a93, type: 3}
   - {fileID: 7877262044788101972, guid: dac640810e918ec44999a70a9a640a95, type: 3}
   - {fileID: 4106020461603353979, guid: cf135a29cfb5180428720acd70f7dd1d, type: 3}
+  - {fileID: 7811668903481120029, guid: 216a3e6b46906d04497e96ab8d6fb79f, type: 3}
+  - {fileID: 4094967837743347012, guid: 522d88ec4331dae428e788ad17fe466a, type: 3}
+  - {fileID: 8488641750937174433, guid: 5033f7e493a742440b8183d4e38c31b3, type: 3}
 --- !u!4 &587217057
 Transform:
   m_ObjectHideFlags: 0
@@ -873,7 +876,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   board: {fileID: 2092704871}
   pool: {fileID: 587217056}
+  textCoin: {fileID: 580648347}
   turn: 0
+  coin: 0
+  isGamePlay: 1
 --- !u!4 &1000372374
 Transform:
   m_ObjectHideFlags: 0
@@ -1904,9 +1910,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDir: 0
-  cardPlayerPrefab: {fileID: 3471969550751204456, guid: 54b9bf405ec063f41a47e93203044a93, type: 3}
-  cardEnemyPrefab: {fileID: 7877262044788101972, guid: dac640810e918ec44999a70a9a640a95, type: 3}
-  cardMeatPrefab: {fileID: 4106020461603353979, guid: cf135a29cfb5180428720acd70f7dd1d, type: 3}
   cells: {fileID: 1821174861}
   cards: {fileID: 2021022656}
   cardLayer:

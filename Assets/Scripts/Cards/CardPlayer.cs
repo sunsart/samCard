@@ -19,6 +19,9 @@ public class CardPlayer : MonoBehaviour
   public int healthVal;
   public int attackVal;
 
+  public int addHealthByTurn = 0;
+  public int minusHealthByTurn = 0;
+
 
   void Start() 
   {
@@ -31,21 +34,21 @@ public class CardPlayer : MonoBehaviour
 
   public void SetCardStat()
   {
-    // 최대 체력 limit
+    // 1. 최대 체력 limit
     if(healthVal >= Settings.playerMaxHealth)
       healthVal = Settings.playerMaxHealth;
 
-    // healthVal 값 설정
+    // 2. healthVal 값 설정
     if(healthVal > 0)
       textHealth.alpha = 1f;
     else {
       textHealth.alpha = 0f;
-
       //게임오버
       GameManager.instance.isGamePlay = false;
+      Debug.Log("***** game over ******");
     }
 
-    // attackVal 값 설정
+    // 3. attackVal 값 설정
     if(attackVal > 0) {
       textAttack.alpha = 1f;
     } else {
@@ -53,6 +56,7 @@ public class CardPlayer : MonoBehaviour
       textAttack.alpha = 0f;
     }
 
+    // 4. text 갱신
     textHealth.text = healthVal.ToString();
     textAttack.text = attackVal.ToString();
   }
@@ -63,6 +67,25 @@ public class CardPlayer : MonoBehaviour
       return;
 
     Debug.Log("주인공 카드 클릭...");
+  }
+
+  public void BrocastCards()
+  {
+    // 턴마다 체력 1 증가
+    if(this.addHealthByTurn > 0)
+    {
+      this.healthVal++;
+      this.SetCardStat();
+      this.addHealthByTurn--;
+    }
+
+    // 턴마다 체력 1 감소
+    if(this.minusHealthByTurn > 0)
+    {
+      this.healthVal--;
+      this.SetCardStat();
+      this.addHealthByTurn--;
+    }
   }
 
   public void FlipCard() 
