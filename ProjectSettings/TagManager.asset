@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Cell
   - Item
+  - Place
+  - Weapon
   layers:
   - Default
   - TransparentFX

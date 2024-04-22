@@ -2,50 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using TMPro;
 using System;
 
-public class CardCoin : MonoBehaviour
+public class CardTown : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] private TextMeshPro textAddCoin;
-
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
-
-  private int addCoinVal;
 
 
   void OnEnable()
   {
-    // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-    textAddCoin.alpha = 0f;
-
-    // 카드 능력치 설정
-    SetCardValue();
-
     Invoke("FlipCard", Settings.flipDelay);
-  }
-
-  void SetCardValue()
-  {
-    this.addCoinVal = UnityEngine.Random.Range(2, 10);
-  }
-
-  public void SetCardStat()
-  {
-    textAddCoin.text = addCoinVal.ToString();
-
-    // addCoinVal 값 설정
-    if(addCoinVal > 0) {
-      textAddCoin.alpha = 1f;
-    } else {
-      textAddCoin.alpha = 0f;
-      DieCard();
-    }
   }
 
   private void DieCard()
@@ -61,7 +32,7 @@ public class CardCoin : MonoBehaviour
     transform.SetParent(null);
 
     // 카드 재정렬
-    GameManager.instance.board.ArrangeBoard();
+    GameManager.instance.board.SpawnCardFromTown(gameObject);
   }
 
   public void ClickedCard() 
@@ -82,13 +53,7 @@ public class CardCoin : MonoBehaviour
 
   private void ActionThisCard()
   {
-    // GameManager coin 값 변경
-    GameManager.instance.coin += addCoinVal;
-    GameManager.instance.SetUiText();
-
-    // meat 값 변경
-    this.addCoinVal = 0;
-    this.SetCardStat();
+    DieCard();
   }
 
   public void FlipCard() 
@@ -104,7 +69,6 @@ public class CardCoin : MonoBehaviour
       if(isFlipped)
       {
         spriteRenderer.sprite = frontSprite;
-        SetCardStat();
       }
 
       transform.DOScale(originalScale, Settings.flipSpeed).OnComplete(() => { isFlipping = false; });

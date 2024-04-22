@@ -46,7 +46,7 @@ public class Board : MonoBehaviour
         continue;
       }
 
-      int randNum = UnityEngine.Random.Range(1, 7);
+      int randNum = UnityEngine.Random.Range(1, 10);
       GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, position);
       card.transform.parent = this.cards.transform;
     }
@@ -201,7 +201,7 @@ public class Board : MonoBehaviour
       GameObject obj = this.cells.transform.GetChild(i).gameObject;
       if(Physics2D.OverlapCircle(obj.transform.position, 0.5f, cardLayer) == false)
       {
-        int randNum = UnityEngine.Random.Range(1, 7);
+        int randNum = UnityEngine.Random.Range(1, 10);
         GameObject card = GameManager.instance.pool.GetObjectFromPoll(randNum, obj.transform.position);
         card.transform.parent = this.cards.transform;
 
@@ -213,6 +213,21 @@ public class Board : MonoBehaviour
         return;
       }
     }
+  }
+
+  public void SpawnCardFromTown(GameObject obj)
+  {
+    this.isCardsMoving = true;
+
+    int[] positiveCard = {2, 4, 5};
+    int randNum = UnityEngine.Random.Range(0, 3);
+    GameObject card = GameManager.instance.pool.GetObjectFromPoll(positiveCard[randNum], obj.transform.position);
+    card.transform.parent = this.cards.transform;
+
+    // 카드 이동, 생성이 끝나고 턴이 완전히 끝나기 전에 실행할 함수
+    this.EndCardsAction();
+
+    this.isCardsMoving = false;
   }
 
   // 플레이어의 체력이 턴당 증가, 감소한다거나

@@ -5,24 +5,24 @@ using DG.Tweening;
 using TMPro;
 using System;
 
-public class CardCoin : MonoBehaviour
+public class CardSword : MonoBehaviour
 {
   [SerializeField] private Sprite frontSprite;
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] private TextMeshPro textAddCoin;
+  [SerializeField] private TextMeshPro textAddAttack;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
 
-  private int addCoinVal;
+  private int addAttackVal;
 
 
   void OnEnable()
   {
     // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
-    textAddCoin.alpha = 0f;
+    textAddAttack.alpha = 0f;
 
     // 카드 능력치 설정
     SetCardValue();
@@ -32,18 +32,18 @@ public class CardCoin : MonoBehaviour
 
   void SetCardValue()
   {
-    this.addCoinVal = UnityEngine.Random.Range(2, 10);
+    this.addAttackVal = UnityEngine.Random.Range(2, 6);
   }
 
   public void SetCardStat()
   {
-    textAddCoin.text = addCoinVal.ToString();
+    textAddAttack.text = addAttackVal.ToString();
 
-    // addCoinVal 값 설정
-    if(addCoinVal > 0) {
-      textAddCoin.alpha = 1f;
+    // addAttackVal 값 설정
+    if(addAttackVal > 0) {
+      textAddAttack.alpha = 1f;
     } else {
-      textAddCoin.alpha = 0f;
+      textAddAttack.alpha = 0f;
       DieCard();
     }
   }
@@ -82,12 +82,16 @@ public class CardCoin : MonoBehaviour
 
   private void ActionThisCard()
   {
-    // GameManager coin 값 변경
-    GameManager.instance.coin += addCoinVal;
-    GameManager.instance.SetUiText();
+    // player 값 변경
+    // 이전 무기와 교체함, 무기 중복되지 않음
+    GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+    playerObj.GetComponent<CardPlayer>().attackVal = this.addAttackVal;
+    playerObj.GetComponent<CardPlayer>().weaponType = 1;
+    playerObj.GetComponent<CardPlayer>().SetCardStat();
+ 
 
-    // meat 값 변경
-    this.addCoinVal = 0;
+    // addAttackVal 값 변경
+    this.addAttackVal = 0;
     this.SetCardStat();
   }
 

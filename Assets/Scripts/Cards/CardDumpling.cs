@@ -11,7 +11,7 @@ public class CardDumpling : MonoBehaviour
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] protected TextMeshPro textAddHealth;
+  [SerializeField] private TextMeshPro textAddHealth;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부

@@ -10,8 +10,10 @@ public class CardPlayer : MonoBehaviour
   [SerializeField] private Sprite backSprite;
   [SerializeField] private SpriteRenderer spriteRenderer;
 
-  [SerializeField] protected TextMeshPro textHealth;
-  [SerializeField] protected TextMeshPro textAttack;
+  [SerializeField] private TextMeshPro textHealth;
+  [SerializeField] private TextMeshPro textAttack;
+  [SerializeField] private TextMeshPro textWeapon;
+  [HideInInspector] public int weaponType = 1;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
@@ -59,6 +61,12 @@ public class CardPlayer : MonoBehaviour
     // 4. text 갱신
     textHealth.text = healthVal.ToString();
     textAttack.text = attackVal.ToString();
+    if(this.weaponType == 1)
+      this.textWeapon.text = "K";
+    else if(this.weaponType == 2)
+      this.textWeapon.text = "S";
+    else if(this.weaponType == 3)
+      this.textWeapon.text = "B";
   }
 
   public void ClickedCard() 
