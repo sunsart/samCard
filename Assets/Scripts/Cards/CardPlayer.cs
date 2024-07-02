@@ -12,8 +12,16 @@ public class CardPlayer : MonoBehaviour
 
   [SerializeField] private TextMeshPro textHealth;
   [SerializeField] private TextMeshPro textAttack;
-  [SerializeField] private TextMeshPro textWeapon;
-  [HideInInspector] public int weaponType = 1;
+
+  // 소지 무기 타입
+  public enum WeaponType
+  {
+      Sword,
+      Spear,
+      Bow
+  }
+  [HideInInspector] public WeaponType weaponType;
+  [SerializeField] private TextMeshPro textWeaponType;
 
   private bool isFlipped = false;   // 앞면으로 뒤집어졌는지 여부
   private bool isFlipping = false;  // 앞면으로 뒤집어지는 중인지 여부
@@ -30,6 +38,8 @@ public class CardPlayer : MonoBehaviour
     // 게임시작시 카드가 뒤집히기전 뒷면상태에서 텍스트가 표시되면 안됨
     textHealth.alpha = 0f;
     textAttack.alpha = 0f;
+
+    this.weaponType = WeaponType.Sword;
 
     Invoke("FlipCard", Settings.flipDelay);
   }
@@ -56,17 +66,22 @@ public class CardPlayer : MonoBehaviour
     } else {
       attackVal = 0;
       textAttack.alpha = 0f;
+      this.textWeaponType.text = null;
     }
 
     // 4. text 갱신
     textHealth.text = healthVal.ToString();
     textAttack.text = attackVal.ToString();
-    if(this.weaponType == 1)
-      this.textWeapon.text = "K";
-    else if(this.weaponType == 2)
-      this.textWeapon.text = "S";
-    else if(this.weaponType == 3)
-      this.textWeapon.text = "B";
+
+    if(this.weaponType == WeaponType.Sword)
+      this.textWeaponType.text = "SW";
+    else if(this.weaponType == WeaponType.Spear)
+      this.textWeaponType.text = "SP";
+    else if(this.weaponType == WeaponType.Bow)
+      this.textWeaponType.text = "BO";
+
+    // if(attackVal <= 0)
+    //   this.textWeaponType.text = "";
   }
 
   public void ClickedCard() 

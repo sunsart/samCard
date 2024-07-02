@@ -181,8 +181,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 4916992458826656444}
   textHealth: {fileID: 4050642208381741553}
   textAttack: {fileID: 8455602635814493798}
-  textWeapon: {fileID: 6028860260858398599}
   weaponType: 1
+  textWeaponType: {fileID: 6028860260858398599}
   healthVal: 10
   attackVal: 5
   addHealthByTurn: 0
@@ -541,7 +541,7 @@ GameObject:
   - component: {fileID: 1934851033654030860}
   - component: {fileID: 6028860260858398599}
   m_Layer: 7
-  m_Name: TextWeapon
+  m_Name: TextWeaponType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

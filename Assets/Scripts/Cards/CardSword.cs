@@ -86,7 +86,7 @@ public class CardSword : MonoBehaviour
     // 이전 무기와 교체함, 무기 중복되지 않음
     GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
     playerObj.GetComponent<CardPlayer>().attackVal = this.addAttackVal;
-    playerObj.GetComponent<CardPlayer>().weaponType = 1;
+    playerObj.GetComponent<CardPlayer>().weaponType = CardPlayer.WeaponType.Sword;
     playerObj.GetComponent<CardPlayer>().SetCardStat();
  
 

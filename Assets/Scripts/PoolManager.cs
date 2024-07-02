@@ -30,7 +30,7 @@ public class PoolManager : MonoBehaviour
 
       foreach (GameObject obj in pools[index])
       {
-        // 오브젝트가 비활성화(대기 상태)인지 확인
+        // 오브젝트가 비활성화(대기 상태)이면
         if (!obj.activeSelf)
         {
           select = obj;
